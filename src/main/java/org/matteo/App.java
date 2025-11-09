@@ -9,11 +9,11 @@ public class App {
   private TaskDAO dao = new TaskDAO();
 
   public void run() {
+    // create the initial file if it;
     if (isFirstLaunch()) {
       showWelcomeScreen();
       setupDefaults();
     }
-
     showMainMenu();
   }
 
@@ -67,7 +67,7 @@ public class App {
           deleteAllTasks();
           continue;
         default:
-          System.out.println("Wrong input, please enter a number between 1-4");
+          System.out.println("Wrong input, please enter a number between 1-6");
       }
     }
     sc.close();
@@ -82,9 +82,11 @@ public class App {
     }
 
     System.out.println("---> Your Tasks <---");
+    // list all the tasks that are in the tasks lists
     for (Task t : tasks) {
       String status = t.getStatus() ? "Done" : "Not Done";
-      System.out.printf("%d. %s - %s (%s)%n", t.getId(), t.getName(), t.getDescription(), status);
+      System.out.printf("Id: %d \nName: %s\n Description: %s \n Status: %s%n", t.getId(), t.getName(),
+          t.getDescription(), status);
     }
     sc.nextLine();
   }

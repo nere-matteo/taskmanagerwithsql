@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.List;
 
 public class App {
+  Scanner sc = new Scanner(System.in);
   private TaskDAO dao = new TaskDAO();
 
   public void run() {
@@ -32,6 +33,7 @@ public class App {
   }
 
   private void showMainMenu() {
+    sc.nextLine();
     boolean on = true;
     Scanner sc = new Scanner(System.in);
 
@@ -40,7 +42,9 @@ public class App {
       System.out.println("1. List all tasks");
       System.out.println("2. Add task");
       System.out.println("3. Mark task done");
-      System.out.println("4. Exit");
+      System.out.println("4. Delete a task");
+      System.out.println("5. Exit");
+      System.out.println("6. Delete All Tasks");
       int choice = sc.nextInt();
 
       switch (choice) {
@@ -51,11 +55,17 @@ public class App {
           addTask();
           continue;
         case 3:
-          // markTask();
+          markTask();
           continue;
         case 4:
+          deleteTask();
+          continue;
+        case 5:
           on = false;
           break;
+        case 6:
+          deleteAllTasks();
+          continue;
         default:
           System.out.println("Wrong input, please enter a number between 1-4");
       }
@@ -76,19 +86,44 @@ public class App {
       String status = t.getStatus() ? "Done" : "Not Done";
       System.out.printf("%d. %s - %s (%s)%n", t.getId(), t.getName(), t.getDescription(), status);
     }
+    sc.nextLine();
   }
 
   private void addTask() {
-    Scanner sc = new Scanner(System.in);
 
     System.out.println("Please enter the task name");
-    System.out.println(">");
+    System.out.print(">");
     String taskName = sc.nextLine();
     System.out.println("Please enter a task description");
-    System.out.println(">");
+    System.out.print(">");
     String taskDescription = sc.nextLine();
     Task task = new Task(1, taskName, taskDescription, false);
 
     dao.createTask(task);
+
+    System.out.println("Added a task with name " + taskName + " and task description: " + taskDescription);
+    sc.nextLine();
+  }
+
+  private void markTask() {
+    System.out.println("Please select which Task to mark");
+    System.out.print(">");
+    listTasks();
+    int choice = sc.nextInt();
+    dao.markAsDone(choice);
+    sc.nextLine();
+  }
+
+  private void deleteTask() {
+    System.out.println("Please select which Task to delete");
+    System.out.print(">");
+    listTasks();
+    int choice = sc.nextInt();
+    dao.deleteTask(choice);
+    sc.nextLine();
+  }
+
+  private void deleteAllTasks() {
+    dao.deleteAllTasks();
   }
 }

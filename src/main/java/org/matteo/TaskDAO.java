@@ -36,7 +36,7 @@ public class TaskDAO {
 
   public List<Task> getAllTasks() {
     List<Task> tasks = new ArrayList<>();
-    String sql = "SELECT * FROM tasks"; // the sql command to be used. 
+    String sql = "SELECT * FROM tasks"; // the sql command to be used.
 
     try (Connection conn = Database.getConnection();
         Statement stmt = conn.createStatement();
@@ -60,13 +60,13 @@ public class TaskDAO {
     try (Connection conn = Database.getConnection();
         Statement stmt = conn.createStatement()) {
       stmt.executeUpdate(sql);
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
-    } 
+    }
   }
 
   public void markAsDone(int id) {
-    String sql = "UPDATE tasks SET done = 1 WHERE id = ?";
+    String sql = "UPDATE tasks SET status = 1 WHERE id = ?";
     try (Connection conn = Database.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, id);

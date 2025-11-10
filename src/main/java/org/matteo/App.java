@@ -36,7 +36,6 @@ public class App {
     sc.nextLine();
     boolean on = true;
     Scanner sc = new Scanner(System.in);
-
     while (on) {
       System.out.println("======*Task Manager*=======");
       System.out.println("1. List all tasks");
@@ -53,13 +52,13 @@ public class App {
           continue;
         case 2:
           addTask();
-          continue;
+          break;
         case 3:
           markTask();
-          continue;
+          break;
         case 4:
           deleteTask();
-          continue;
+          break;
         case 5:
           on = false;
           break;
@@ -88,7 +87,6 @@ public class App {
       System.out.printf("Id: %d \nName: %s\n Description: %s \n Status: %s%n", t.getId(), t.getName(),
           t.getDescription(), status);
     }
-    sc.nextLine();
   }
 
   private void addTask() {
@@ -108,12 +106,44 @@ public class App {
   }
 
   private void markTask() {
-    System.out.println("Please select which Task to mark");
-    System.out.print(">");
+    List<Task> tasks = dao.getAllTasks();
+    if (tasks.isEmpty()) {
+      System.out.println("No tasks available to mark");
+      return;
+    }
+    System.out.println("Please select a task to mark");
     listTasks();
-    int choice = sc.nextInt();
-    dao.markAsDone(choice);
-    sc.nextLine();
+
+    int choice;
+    boolean valid = false;
+
+    while (true) {
+      System.out.print("> ");
+
+      if (!sc.hasNextInt()) {
+        System.out.println("Please enter a valid number");
+        sc.nextInt();
+        continue;
+      }
+
+      choice = sc.nextInt();
+      sc.nextLine();
+
+      for (Task t : tasks) {
+        if (t.getId() == choice) {
+          valid = true;
+          break;
+        }
+      }
+
+      if (valid) {
+        dao.markAsDone(choice);
+        System.out.println("Marked the task as done");
+        break;
+      } else {
+        System.out.println("Please re-enter a valid ID");
+      }
+    }
   }
 
   private void deleteTask() {
